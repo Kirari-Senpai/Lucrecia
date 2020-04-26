@@ -3,6 +3,7 @@
 
 # Creator: Kirari
 
+import os
 import sys
 import time
 import socket
@@ -549,31 +550,37 @@ def banner():
 
 def preparate(conf):
 
-	try:
+	if os.getuid()==0:
 
-		print (" \033[0;39m[\033[1;34m*\033[0;39m] Lucrecia is preparing the Honeypot...")
+		try:
 
-		time.sleep(2)
+			print (" \033[0;39m[\033[1;34m*\033[0;39m] Lucrecia is preparing the Honeypot...")
 
-		honeypot = Honeypot(conf)
-		honeypot.start()
-		honeypot.run()
-		#honeypot.stop()
+			time.sleep(2)
 
-	except KeyboardInterrupt:
+			honeypot = Honeypot(conf)
+			honeypot.start()
+			honeypot.run()
+			#honeypot.stop()
 
-		print("\n")
+		except KeyboardInterrupt:
 
-		for _ in threads:
+			print("\n")
 
-			if (_.isAlive()):
+			for _ in threads:
 
-				print (" [*] "+_.name+" disconnected.")
-				time.sleep(1)
+				if (_.isAlive()):
 
-		honeypot.stop() 
+					print (" [*] "+_.name+" disconnected.")
+					time.sleep(1)
 
-		print ("\n\n \033[1;39m[\033[1;32m+\033[1;39m] Thank you so much for use Lucrecia Honeypot! Bye bye...\n")
+			honeypot.stop() 
+
+			print ("\n\n \033[1;39m[\033[1;32m+\033[1;39m] Thank you so much for use Lucrecia Honeypot! Bye bye...\n")
+
+	else:
+
+		print ("\033[1;39m [\033[1;31mx\033[1;39m] You need to run the script as root.\n")
 
 	return
 
